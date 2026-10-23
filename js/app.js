@@ -10,7 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const todoList = document.getElementById('todo-list');
     const errorMsg = document.getElementById('error-msg');
     const counter = document.getElementById('counter');
-    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    const filterAll = document.getElementById('filter-all');
+    const filterActive = document.getElementById('filter-active');
+    const filterDone = document.getElementById('filter-done');
 
     let currentFilter = 'all';
 
@@ -38,31 +41,47 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFilter();
     });
 
-    // الطريقة القياسية المباشرة لـ Event Delegation ليتطابق مع فحص الـ Regex
+    // استخدام closest لتجنب مشاكل النقر على العقد النصية داخل العناصر
     todoList.addEventListener('click', function(e) {
-        if (e.target.classList.contains('delete-btn')) {
-            e.target.closest('li').remove();
-        } else if (e.target.classList.contains('item-text') || e.target.tagName === 'LI') {
-            const li = e.target.closest('li');
-            if (li) {
-                li.classList.toggle('completed');
-            }
+        const deleteBtn = e.target.closest('.delete-btn');
+        const itemText = e.target.closest('.item-text');
+        const li = e.target.closest('li');
+
+        if (!li) return;
+
+        if (deleteBtn) {
+            li.remove();
+        } else if (itemText || e.target.tagName === 'LI') {
+            li.classList.toggle('completed');
         }
+        
         updateCounter();
         applyFilter();
     });
 
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+    function setActiveButton(activeBtn) {
+        filterAll.classList.remove('active');
+        filterActive.classList.remove('active');
+        filterDone.classList.remove('active');
+        activeBtn.classList.add('active');
+    }
 
-            if (this.id === 'filter-all') currentFilter = 'all';
-            if (this.id === 'filter-active') currentFilter = 'active';
-            if (this.id === 'filter-done') currentFilter = 'done';
+    filterAll.addEventListener('click', () => {
+        setActiveButton(filterAll);
+        currentFilter = 'all';
+        applyFilter();
+    });
 
-            applyFilter();
-        });
+    filterActive.addEventListener('click', () => {
+        setActiveButton(filterActive);
+        currentFilter = 'active';
+        applyFilter();
+    });
+
+    filterDone.addEventListener('click', () => {
+        setActiveButton(filterDone);
+        currentFilter = 'done';
+        applyFilter();
     });
 
     function applyFilter() {
