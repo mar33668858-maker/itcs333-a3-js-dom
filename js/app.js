@@ -14,48 +14,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentFilter = 'all';
 
- todoForm.addEventListener('submit', (e) => {
-     e.preventDefault();
-    const text = todoInput.value.trim();
+    todoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = todoInput.value.trim();
 
-
-  if (text === '') {
-    errorMsg.classList.remove('hidden');
-    return;
+        if (text === '') {
+            errorMsg.classList.remove('hidden');
+            errorMsg.style.display = 'block';
+            return;
         }
 
-    errorMsg.classList.add('hidden');
+        errorMsg.classList.add('hidden');
+        errorMsg.style.display = 'none';
 
-  const li = document.createElement('li');
+        const li = document.createElement('li');
         li.innerHTML = `
-            <span class="todo-text">${text}</span>
+            <span class="item-text">${text}</span>
             <button class="delete-btn">Delete</button>
         `;
 
         todoList.appendChild(li);
         todoInput.value = '';
-
-    updateCounter();
-    applyFilter();
+        
+        updateCounter();
+        applyFilter();
     });
 
- todoList.addEventListener('click', (e) => {
-    const target = e.target;
+    todoList.addEventListener('click', (e) => {
+        const target = e.target;
 
-if (target.classList.contains('delete-btn')) {
-            target.closest('li').remove();
-            updateCounter();
+        if (target.classList.contains('delete-btn')) {
+            const li = target.closest('li');
+            if (li) {
+                li.remove();
+                updateCounter();
+            }
+        } else if (target.classList.contains('item-text') || target.tagName === 'LI') {
+            const li = target.closest('li');
+            if (li) {
+                li.classList.toggle('completed');
+                updateCounter();
+                applyFilter();
+            }
         }
-else if (target.classList.contains('todo-text') || target.tagName === 'LI') {
-    const li = target.closest('li');
-    if (li) {
-        li.classList.toggle('completed');
-            updateCounter();
-            applyFilter();
-        }
-    }
+    });
 
-filterButtons.forEach(button => {
+    filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
@@ -68,7 +72,7 @@ filterButtons.forEach(button => {
         });
     });
 
-function applyFilter() {
+    function applyFilter() {
         const items = todoList.querySelectorAll('li');
         items.forEach(item => {
             const isCompleted = item.classList.contains('completed');
@@ -81,7 +85,8 @@ function applyFilter() {
             }
         });
     }
-function updateCounter() {
+
+    function updateCounter() {
         const items = todoList.querySelectorAll('li');
         let activeCount = 0;
         items.forEach(item => {
@@ -89,7 +94,8 @@ function updateCounter() {
                 activeCount++;
             }
         });
-    counter.textContent = `${activeCount} item(s) left`;
-}
-updateCounter();
+        counter.textContent = `${activeCount} item(s) left`;
+    }
+
+    updateCounter();
 });
