@@ -77,11 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
         items.forEach(item => {
             const isCompleted = item.classList.contains('completed');
             if (currentFilter === 'all') {
-                item.style.display = '';
+                item.style.display = 'block';
             } else if (currentFilter === 'active') {
-                item.style.display = isCompleted ? 'none' : '';
+                item.style.display = isCompleted ? 'none' : 'block';
             } else if (currentFilter === 'done') {
-                item.style.display = isCompleted ? '' : 'none';
+                item.style.display = isCompleted ? 'block' : 'none';
             }
         });
     }
