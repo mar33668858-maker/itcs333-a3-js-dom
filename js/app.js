@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   if (text === '') {
-     errorMsg.style.display = 'block';
+    errorMsg.classList.remove('hidden');
     return;
         }
 
-    errorMsg.style.display = 'none';
+    errorMsg.classList.add('hidden');
 
   const li = document.createElement('li');
         li.innerHTML = `
@@ -46,7 +46,7 @@ if (target.classList.contains('delete-btn')) {
             target.closest('li').remove();
             updateCounter();
         }
-else if (target.classList.contains('todo-text')) {
+else if (target.classList.contains('todo-text') || target.tagName === 'LI') {
             target.parentElement.classList.toggle('completed');
             updateCounter();
             applyFilter();
