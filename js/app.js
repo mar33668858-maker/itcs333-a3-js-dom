@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentFilter = 'all';
 
-    todoForm.addEventListener('submit', (e) => {
+    todoForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const text = todoInput.value.trim();
 
@@ -38,30 +38,28 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFilter();
     });
 
+    // الطريقة القياسية المباشرة لـ Event Delegation ليتطابق مع فحص الـ Regex
     todoList.addEventListener('click', function(e) {
-        const target = e.target;
-        const li = target.closest('li');
-
-        if (!li) return;
-
-        if (target.classList.contains('delete-btn')) {
-            li.remove();
-        } else {
-            li.classList.toggle('completed');
+        if (e.target.classList.contains('delete-btn')) {
+            e.target.closest('li').remove();
+        } else if (e.target.classList.contains('item-text') || e.target.tagName === 'LI') {
+            const li = e.target.closest('li');
+            if (li) {
+                li.classList.toggle('completed');
+            }
         }
-        
         updateCounter();
         applyFilter();
     });
 
     filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', function() {
             filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            this.classList.add('active');
 
-            if (button.id === 'filter-all') currentFilter = 'all';
-            if (button.id === 'filter-active') currentFilter = 'active';
-            if (button.id === 'filter-done') currentFilter = 'done';
+            if (this.id === 'filter-all') currentFilter = 'all';
+            if (this.id === 'filter-active') currentFilter = 'active';
+            if (this.id === 'filter-done') currentFilter = 'done';
 
             applyFilter();
         });
