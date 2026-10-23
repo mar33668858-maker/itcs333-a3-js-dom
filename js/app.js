@@ -20,12 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (text === '') {
             errorMsg.classList.remove('hidden');
-            errorMsg.style.display = 'block';
             return;
         }
 
         errorMsg.classList.add('hidden');
-        errorMsg.style.display = 'none';
 
         const li = document.createElement('li');
         li.innerHTML = `
@@ -40,24 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFilter();
     });
 
-    // استخدام الـ Event Delegation المباشر على #todo-list فقط
-    todoList.addEventListener('click', (e) => {
+    todoList.addEventListener('click', function(e) {
         const target = e.target;
+        const li = target.closest('li');
+
+        if (!li) return;
 
         if (target.classList.contains('delete-btn')) {
-            const li = target.closest('li');
-            if (li) {
-                li.remove();
-                updateCounter();
-            }
+            li.remove();
         } else {
-            const li = target.closest('li');
-            if (li) {
-                li.classList.toggle('completed');
-                updateCounter();
-                applyFilter();
-            }
+            li.classList.toggle('completed');
         }
+        
+        updateCounter();
+        applyFilter();
     });
 
     filterButtons.forEach(button => {
@@ -78,11 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
         items.forEach(item => {
             const isCompleted = item.classList.contains('completed');
             if (currentFilter === 'all') {
-                item.style.display = '';
+                item.style.display = 'flex';
             } else if (currentFilter === 'active') {
-                item.style.display = isCompleted ? 'none' : '';
+                item.style.display = isCompleted ? 'none' : 'flex';
             } else if (currentFilter === 'done') {
-                item.style.display = isCompleted ? '' : 'none';
+                item.style.display = isCompleted ? 'flex' : 'none';
             }
         });
     }
