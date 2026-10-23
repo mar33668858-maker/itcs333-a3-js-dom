@@ -1,0 +1,14 @@
+{
+  "name": "itcs333-a3-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Autograder for ITCS333 A3 (JS DOM). Do not modify.",
+  "scripts": {
+    "test": "jest --config jest.config.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^24.1.3"
+  }
+}
