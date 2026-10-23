@@ -47,11 +47,13 @@ if (target.classList.contains('delete-btn')) {
             updateCounter();
         }
 else if (target.classList.contains('todo-text') || target.tagName === 'LI') {
-            target.parentElement.classList.toggle('completed');
+    const li = target.closest('li');
+    if (li) {
+        li.classList.toggle('completed');
             updateCounter();
             applyFilter();
         }
-    });
+    }
 
 filterButtons.forEach(button => {
         button.addEventListener('click', () => {
