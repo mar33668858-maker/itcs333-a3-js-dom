@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFilter();
     });
 
+    // استخدام الـ Event Delegation المباشر على #todo-list فقط
     todoList.addEventListener('click', (e) => {
         const target = e.target;
 
@@ -49,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.remove();
                 updateCounter();
             }
-        } else if (target.classList.contains('item-text') || target.tagName === 'LI') {
+        } else {
             const li = target.closest('li');
             if (li) {
                 li.classList.toggle('completed');
@@ -77,11 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         items.forEach(item => {
             const isCompleted = item.classList.contains('completed');
             if (currentFilter === 'all') {
-                item.style.display = 'block';
+                item.style.display = '';
             } else if (currentFilter === 'active') {
-                item.style.display = isCompleted ? 'none' : 'block';
+                item.style.display = isCompleted ? 'none' : '';
             } else if (currentFilter === 'done') {
-                item.style.display = isCompleted ? 'block' : 'none';
+                item.style.display = isCompleted ? '' : 'none';
             }
         });
     }
